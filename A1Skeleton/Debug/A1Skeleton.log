@@ -1,0 +1,13 @@
+﻿C:\Program Files\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (A1Skeleton.vcxproj, A2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  main.c
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(148): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(111): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(113): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(117): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(119): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(120): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(122): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(125): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(126): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(127): warning C4305: 'initializing': truncation from 'double' to 'float'
+  A1Skeleton.vcxproj -> C:\Users\taranpreet\Downloads\A3\Debug\A3.exe
