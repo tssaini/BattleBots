@@ -152,10 +152,10 @@ void DrawMeshQM(QuadMesh* qm, int meshSize)
 {
 	int currentQuad=0;
 
-	/*glMaterialfv(GL_FRONT, GL_AMBIENT, qm->mat_ambient);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, qm->mat_ambient);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, qm->mat_specular);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, qm->mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SHININESS, qm->mat_shininess);*/
+	glMaterialfv(GL_FRONT, GL_SHININESS, qm->mat_shininess);
 
 	for(int j=0; j < meshSize; j++)
 	{

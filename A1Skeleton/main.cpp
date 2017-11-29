@@ -1,7 +1,6 @@
 /*******************************************************************
            Multi-Part Model Construction and Manipulation
 ********************************************************************/
-#pragma warning (disable : 4996)
 
 #include <windows.h>
 #include <stdio.h>
@@ -14,6 +13,13 @@
 #include "Vector3D.h"
 #include "QuadMesh.h"
 #include "Matrix3D.h"
+
+
+#include "RGBpixmap.h"
+
+RGBpixmap pix1;         // Data structure containing texture read from a file
+GLuint textureId;
+const int delang = 5;           // Try increasing this to 60
 
 const int meshSize = 32;    // Default Mesh Size
 const int vWidth = 650;     // Viewport width in pixels
@@ -77,168 +83,6 @@ void mouseMotionHandler(int xMouse, int yMouse);
 void keyboard(unsigned char key, int x, int y);
 void functionKeys(int key, int x, int y);
 Vector3D ScreenToWorld(int x, int y);
-
-
-
-
-
-typedef unsigned char  byte;
-typedef unsigned short word;
-typedef unsigned long  dword;
-typedef unsigned short ushort;
-typedef unsigned long  ulong;
-
-typedef struct RGB
-{
-	byte r, g, b;
-} RGB;
-
-typedef struct RGBpixmap
-{
-	int nRows, nCols;
-	RGB *pixel;
-} RGBpixmap;
-
-
-RGBpixmap pix; // make six empty pixmaps, one for each side of cube
-
-
-
-/**************************************************************************
-*  fskip                                                                 *
-*     Skips bytes in a file.                                             *
-**************************************************************************/
-
-void fskip(FILE *fp, int num_bytes)
-{
-	int i;
-	for (i = 0; i < num_bytes; i++)
-		fgetc(fp);
-}
-
-
-/**************************************************************************
-*                                                                        *
-*    Loads a bitmap file into memory.                                    *
-**************************************************************************/
-
-ushort getShort(FILE *fp) //helper function
-{ //BMP format uses little-endian integer types
-  // get a 2-byte integer stored in little-endian form
-	char ic;
-	ushort ip;
-	ic = fgetc(fp); ip = ic;  //first byte is little one 
-	ic = fgetc(fp);  ip |= ((ushort)ic << 8); // or in high order byte
-	return ip;
-}
-//<<<<<<<<<<<<<<<<<<<< getLong >>>>>>>>>>>>>>>>>>>
-ulong getLong(FILE *fp) //helper function
-{  //BMP format uses little-endian integer types
-   // get a 4-byte integer stored in little-endian form
-	ulong ip = 0;
-	char ic = 0;
-	unsigned char uc = ic;
-	ic = fgetc(fp); uc = ic; ip = uc;
-	ic = fgetc(fp); uc = ic; ip |= ((ulong)uc << 8);
-	ic = fgetc(fp); uc = ic; ip |= ((ulong)uc << 16);
-	ic = fgetc(fp); uc = ic; ip |= ((ulong)uc << 24);
-	return ip;
-}
-
-
-void readBMPFile(RGBpixmap *pm, char *file)
-{
-	FILE *fp;
-	int numPadBytes, nBytesInRow;
-	ulong fileSize;
-	ushort reserved1;    // always 0
-	ushort reserved2;     // always 0 
-	ulong offBits; // offset to image - unreliable
-	ulong headerSize;     // always 40
-	ulong numCols; // number of columns in image
-	ulong numRows; // number of rows in image
-	ushort planes;      // always 1 
-	ushort bitsPerPixel;    //8 or 24; allow 24 here
-	ulong compression;      // must be 0 for uncompressed 
-	ulong imageSize;       // total bytes in image 
-	ulong xPels;    // always 0 
-	ulong yPels;    // always 0 
-	ulong numLUTentries;    // 256 for 8 bit, otherwise 0 
-	ulong impColors;       // always 0 
-	long count;
-	char dum;
-
-	/* open the file */
-	if ((fp = fopen(file, "rb")) == NULL)
-	{
-		printf("Error opening file %s.\n", file);
-		exit(1);
-	}
-
-	/* check to see if it is a valid bitmap file */
-	if (fgetc(fp) != 'B' || fgetc(fp) != 'M')
-	{
-		fclose(fp);
-		printf("%s is not a bitmap file.\n", file);
-		exit(1);
-	}
-
-	fileSize = getLong(fp);
-	reserved1 = getShort(fp);    // always 0
-	reserved2 = getShort(fp);     // always 0 
-	offBits = getLong(fp); // offset to image - unreliable
-	headerSize = getLong(fp);     // always 40
-	numCols = getLong(fp); // number of columns in image
-	numRows = getLong(fp); // number of rows in image
-	planes = getShort(fp);      // always 1 
-	bitsPerPixel = getShort(fp);    //8 or 24; allow 24 here
-	compression = getLong(fp);      // must be 0 for uncompressed 
-	imageSize = getLong(fp);       // total bytes in image 
-	xPels = getLong(fp);    // always 0 
-	yPels = getLong(fp);    // always 0 
-	numLUTentries = getLong(fp);    // 256 for 8 bit, otherwise 0 
-	impColors = getLong(fp);       // always 0 
-
-	if (bitsPerPixel != 24)
-	{ // error - must be a 24 bit uncompressed image
-		printf("Error bitsperpixel not 24\n");
-		exit(1);
-	}
-	//add bytes at end of each row so total # is a multiple of 4
-	// round up 3*numCols to next mult. of 4
-	nBytesInRow = ((3 * numCols + 3) / 4) * 4;
-	numPadBytes = nBytesInRow - 3 * numCols; // need this many
-	pm->nRows = numRows; // set class's data members
-	pm->nCols = numCols;
-	pm->pixel = (RGB *)malloc(3 * numRows * numCols);//make space for array
-	if (!pm->pixel) return; // out of memory!
-	count = 0;
-	dum;
-	for (ulong row = 0; row < numRows; row++) // read pixel values
-	{
-		for (ulong col = 0; col < numCols; col++)
-		{
-			int r, g, b;
-			b = fgetc(fp); g = fgetc(fp); r = fgetc(fp); //read bytes
-			pm->pixel[count].r = r; //place them in colors
-			pm->pixel[count].g = g;
-			pm->pixel[count++].b = b;
-		}
-		fskip(fp, numPadBytes);
-	}
-	fclose(fp);
-}
-
-
-void setTexture(RGBpixmap *p, GLuint textureID)
-{
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, p->nCols, p->nRows, 0, GL_RGB,
-		GL_UNSIGNED_BYTE, p->pixel);
-}
-
 
 int main(int argc, char **argv)
 {
@@ -320,52 +164,6 @@ void createHoles() {
 // Set up OpenGL. For viewport and projection setup see reshape(). */
 void initOpenGL(int w, int h)
 {
-
-	// Other OpenGL setup
-	glEnable(GL_DEPTH_TEST);   // Remove hidded surfaces
-	//glShadeModel(GL_SMOOTH);   // Use smooth shading, makes boundaries between polygons harder to see 
-	glClearColor(0.6F, 0.6F, 0.6F, 0.0F);  // Color and depth for glClear
-	glClearDepth(1.0f);
-	//glEnable(GL_NORMALIZE);    // Renormalize normal vectors 
-	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);   // Nicer perspective
-
-	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	//glEnable(GL_DEPTH_TEST);
-	glEnable(GL_TEXTURE_2D);
-
-	readBMPFile(&pix, "..\\clover01.bmp");  // read texture for side 1 from image
-	setTexture(&pix, 2000);
-
-	/*
-	//glGenTextures(1, 2000);
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);   // store pixels by byte	
-	glBindTexture(GL_TEXTURE_2D, 2000); // select current texture
-	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(      // initialize texture
-		GL_TEXTURE_2D, // texture is 2-d
-		0,             // resolution level 0
-		GL_RGB,        // internal format
-		pix.nCols,    // image width
-		pix.nRows,    // image height
-		0,             // no border
-		GL_RGB,        // my format
-		GL_UNSIGNED_BYTE, // my type
-		pix.pixel);   // the pixels
-	*/
-	/*glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, p->nCols, p->nRows, 0, GL_RGB,
-		GL_UNSIGNED_BYTE, p->pixel);
-		*/
-	// Set up texture mapping assuming no lighting/shading 
-	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-
-
-
     // Set up and enable lighting
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -380,6 +178,14 @@ void initOpenGL(int w, int h)
     glEnable(GL_LIGHT0);
     //glEnable(GL_LIGHT1);   // This light is currently off
 
+    // Other OpenGL setup
+    glEnable(GL_DEPTH_TEST);   // Remove hidded surfaces
+    glShadeModel(GL_SMOOTH);   // Use smooth shading, makes boundaries between polygons harder to see 
+    glClearColor(0.6F, 0.6F, 0.6F, 0.0F);  // Color and depth for glClear
+    glClearDepth(1.0f);
+    glEnable(GL_NORMALIZE);    // Renormalize normal vectors 
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);   // Nicer perspective
+
     // Set up ground/sea floor quad mesh
     Vector3D origin = NewVector3D(-16.0f, 0.0f, 16.0f);
     Vector3D dir1v = NewVector3D(1.0f, 0.0f, 0.0f);
@@ -387,10 +193,12 @@ void initOpenGL(int w, int h)
     groundMesh = NewQuadMesh(meshSize);
     InitMeshQM(&groundMesh, meshSize, origin, 32.0, 32.0, dir1v, dir2v);
 
+	
+
     Vector3D ambient = NewVector3D(0.0f, 0.05f, 0.0f);
     Vector3D diffuse = NewVector3D(0.4f, 0.8f, 0.4f);
     Vector3D specular = NewVector3D(0.04f, 0.04f, 0.04f);
-    //SetMaterialQM(&groundMesh, ambient, diffuse, specular, 0.2);
+    SetMaterialQM(&groundMesh, ambient, diffuse, specular, 0.2);
 
 	createHoles();
     // Set up the bounding box of the scene
@@ -420,30 +228,20 @@ void display(void)
    
 
     // Set submarine material properties
-    /*glMaterialfv(GL_FRONT, GL_AMBIENT, submarine_mat_ambient);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, submarine_mat_ambient);
     glMaterialfv(GL_FRONT, GL_SPECULAR, submarine_mat_specular);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, submarine_mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SHININESS, submarine_mat_shininess);
-	*/
+
     // Apply transformations to move submarine
     // ...
 	glPushMatrix();
 
-	glBindTexture(GL_TEXTURE_2D, 2000); // right face of cube
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0);
-	glVertex3f(1.0f, 1.0f, -1.0f);
-	glTexCoord2f(0.0, 1.0);
-	glVertex3f(1.0f, 1.0f, 1.0f);
-	glTexCoord2f(1.0, 1.0);
-	glVertex3f(1.0f, -1.0f, 1.0f);
-	glTexCoord2f(1.0, 0.0);
-	glVertex3f(1.0f, -1.0f, -1.0f);
-	glEnd();
+	
 
-	glFlush();
 	glPopMatrix();
-	//glBindTexture(0, 0);
+
+   
 
     // Draw ground/sea floor
     DrawMeshQM(&groundMesh, meshSize);
