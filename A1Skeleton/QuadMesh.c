@@ -166,31 +166,38 @@ void DrawMeshQM(QuadMesh* qm, int meshSize)
 			glNormal3f(qm->quads[currentQuad].vertices[0]->normal.x,
 				       qm->quads[currentQuad].vertices[0]->normal.y,
 					   qm->quads[currentQuad].vertices[0]->normal.z);
+			glTexCoord2f(0.0, 0.0);
 			glVertex3f(qm->quads[currentQuad].vertices[0]->position.x,
 				       qm->quads[currentQuad].vertices[0]->position.y,
 					   qm->quads[currentQuad].vertices[0]->position.z);
 			
+
 			glNormal3f(qm->quads[currentQuad].vertices[1]->normal.x,
 				       qm->quads[currentQuad].vertices[1]->normal.y,
-					   qm->quads[currentQuad].vertices[1]->normal.z);			
+					   qm->quads[currentQuad].vertices[1]->normal.z);
+			glTexCoord2f(0.0, 1.0);
 			glVertex3f(qm->quads[currentQuad].vertices[1]->position.x,
 				       qm->quads[currentQuad].vertices[1]->position.y,
 					   qm->quads[currentQuad].vertices[1]->position.z);
 			
+
 			glNormal3f(qm->quads[currentQuad].vertices[2]->normal.x,
 				       qm->quads[currentQuad].vertices[2]->normal.y,
-					   qm->quads[currentQuad].vertices[2]->normal.z);			
+					   qm->quads[currentQuad].vertices[2]->normal.z);
+			glTexCoord2f(1.0, 1.0);
 			glVertex3f(qm->quads[currentQuad].vertices[2]->position.x,
 				       qm->quads[currentQuad].vertices[2]->position.y,
 					   qm->quads[currentQuad].vertices[2]->position.z);
 			
+
 			glNormal3f(qm->quads[currentQuad].vertices[3]->normal.x,
 				       qm->quads[currentQuad].vertices[3]->normal.y,
-					   qm->quads[currentQuad].vertices[3]->normal.z);			
+					   qm->quads[currentQuad].vertices[3]->normal.z);
+			glTexCoord2f(1.0, 0.0);
 			glVertex3f(qm->quads[currentQuad].vertices[3]->position.x,
 				       qm->quads[currentQuad].vertices[3]->position.y,
 					   qm->quads[currentQuad].vertices[3]->position.z);
-
+					   
 			glEnd();
 			currentQuad++;
 		}

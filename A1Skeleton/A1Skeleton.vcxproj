@@ -117,6 +117,7 @@
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="Matrix3D.h" />
     <ClInclude Include="QuadMesh.h" />
+    <ClInclude Include="RGBpixmap.h" />
     <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +125,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="Matrix3D.c" />
     <ClCompile Include="QuadMesh.c" />
+    <ClCompile Include="RGBpixmap.c" />
     <ClCompile Include="Vector3D.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

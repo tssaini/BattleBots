@@ -27,6 +27,9 @@
     <ClInclude Include="Matrix3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RGBpixmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3D.c">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Matrix3D.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RGBpixmap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
