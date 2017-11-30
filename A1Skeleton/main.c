@@ -32,8 +32,6 @@ int sYaw;
 int sPitch;
 int ePitch;
 
-int sRoll;//bonus
-
 static int currentButton;
 static unsigned char currentKey;
 
@@ -78,11 +76,14 @@ void functionKeys(int key, int x, int y);
 Vector3D ScreenToWorld(int x, int y);
 
 
+static GLfloat bot1Speed = 0.0;
+static GLfloat bot1X = 0.0;
+static GLfloat bot1Y = 0.0;
+static GLfloat bot1Z = 0.0;
+static GLfloat bot1Angle = 0.0;
+static GLfloat wheelAngle = 0;
 
-
-RGBpixmap pix[2]; // make six empty pixmaps, one for each side of cube
-
-
+RGBpixmap pix[3];
 
 int main(int argc, char **argv)
 {
@@ -168,6 +169,8 @@ void initOpenGL(int w, int h)
 	glClearDepth(1.0f);
 	glEnable(GL_NORMALIZE);    // Renormalize normal vectors 
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);   // Nicer perspective
+	//glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
 
 	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	//glEnable(GL_DEPTH_TEST);
@@ -178,6 +181,9 @@ void initOpenGL(int w, int h)
 
 	readBMPFile(&pix[1], "..\\grass3.bmp");  // read texture for side 1 from image
 	setTexture(&pix[1], 2001);
+
+	readBMPFile(&pix[2], "..\\tire.bmp");  // read texture for side 1 from image
+	setTexture(&pix[2], 2002);
 
 	/*
 	//glGenTextures(1, 2000);
@@ -220,6 +226,50 @@ void initOpenGL(int w, int h)
     //Set(&BBox.max, 8.0f, 6.0,  8.0);
 }
 
+void draw_circle(const GLfloat radius, const GLuint num_vertex)
+{
+	const GLfloat delta_angle = 2.0*M_PI / num_vertex;
+
+	glBegin(GL_TRIANGLE_FAN);
+
+	glTexCoord2f(0.5, 0.5);
+
+	glVertex4f(0,0,0,1);
+
+	for (int i = 0; i < num_vertex; i++)
+	{
+		glTexCoord2f((cos(delta_angle*i) + 1.0)*0.5, (sin(delta_angle*i) + 1.0)*0.5);
+
+		glVertex4f(cos(delta_angle*i) * radius, sin(delta_angle*i) * radius, 0, 1);
+	}
+	glTexCoord2f((1.0 + 1.0)*0.5, (0.0 + 1.0)*0.5);
+
+	glVertex4f(1.0 * radius, 0, 0, 1);
+
+	glEnd();
+}
+
+
+void drawWheel() {
+
+	glPushMatrix();
+	GLUquadricObj *quadric;
+	quadric = gluNewQuadric();
+	gluQuadricTexture(quadric, GL_TRUE);
+	gluCylinder(quadric, 1, 1, 0.5, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	draw_circle(1,20);
+	glPopMatrix();
+
+	glPushMatrix();
+	
+	glTranslatef(0,0,0.5);
+	draw_circle(1, 20);
+	glPopMatrix();
+
+}
 
 // Callback, called whenever GLUT determines that the window should be redisplayed
 // or glutPostRedisplay() has been called.
@@ -260,44 +310,51 @@ void display(void)
 	gluSphere(quadric, .5, 36, 18);
 	glPopMatrix();*/
 
+	//bot 1
 	glPushMatrix();
 	CubeMesh c = newCube();
+	
+	glTranslatef(bot1X, bot1Y, bot1Z);
+	glRotatef(bot1Angle, 0.0, 1.0, 0.0);
 
-	//shovel
+	//base
 	glPushMatrix();
-	glTranslatef(0, 2.5, 0);
-	glRotatef(ePitch, 0, 0, 1);
-	glTranslatef(2.75, 0.125, 0);
+	glTranslatef(0,0,0);
+	glScalef(0.75,0.25,0.75);
 	drawCube(&c);
 	glPopMatrix();
 
-	//shovel
+	glBindTexture(GL_TEXTURE_2D, 2002);
+	//wheel 1
 	glPushMatrix();
-	glTranslatef(0, 2.5, 0);
-	glRotatef(ePitch, 0, 0, 1);
-	glTranslatef(2.75, 0.125, 0);
-	glScalef(0.5, 0.5, 0.5);
-	glScalef(0.5, 0.25, 0.5);
-	drawCube(&c);
+	glTranslatef(0.5,0,0.75);
+	glRotatef(wheelAngle, 0,0,1);
+	glScalef(0.4,0.4,0.4);
+	drawWheel();
 	glPopMatrix();
 
-	//elbow
+	//wheel 2
 	glPushMatrix();
-	glTranslatef(0, 2.5, 0);
-	glRotatef(ePitch, 0, 0, 1);
-	glTranslatef(1.25, 0.25, 0);
-	glScalef(0.5, 0.5, 0.5);
-	glScalef(2.5, 0.5, 0.5);
-	drawCube(&c);
+	glTranslatef(-0.5, 0, 0.75);
+	glRotatef(wheelAngle, 0, 0, 1);
+	glScalef(0.4, 0.4, 0.4);
+	drawWheel();
+	glPopMatrix();
+	
+	//wheel 3
+	glPushMatrix();
+	glTranslatef(-0.5, 0, -0.75-0.20);
+	glRotatef(wheelAngle, 0, 0, 1);
+	glScalef(0.4, 0.4, 0.4);
+	drawWheel();
 	glPopMatrix();
 
-	//shoulder
+	//wheel 4
 	glPushMatrix();
-	glTranslatef(0, 1.25, 0);
-	glRotated(90, 0, 0, 1);
-	glScalef(0.5, 0.5, 0.5);
-	glScalef(2.5, 0.5, 0.5);
-	drawCube(&c);
+	glTranslatef(0.5, 0, -0.75-0.20);
+	glRotatef(wheelAngle, 0, 0, 1);
+	glScalef(0.4, 0.4, 0.4);
+	drawWheel();
 	glPopMatrix();
 
 	glPopMatrix();
@@ -312,9 +369,41 @@ void display(void)
     DrawMeshQM(&groundMesh, meshSize);
 	glPopMatrix();
 
+	glPopMatrix();
+
     glutSwapBuffers();   // Double buffering, swap buffers
 }
 
+void moveBot1()
+{
+	//printf("speed is : %f\n", speed);
+	//theta += speed*100 *7.0;
+	if (bot1Speed >= 0.01) {
+		//printf("forwards\n");
+		wheelAngle -= bot1Speed * 30 * 7.0;
+		if (wheelAngle > 360.0)
+			wheelAngle -= 360.0;
+	}
+	else if (bot1Speed <= 0.01) {
+		//printf("backwards\n");
+		wheelAngle -= bot1Speed * 30 * 7.0;
+		if (wheelAngle < 0)
+			wheelAngle += 360.0;
+	}
+
+
+	bot1X += bot1Speed*cos(PI / 180 * -bot1Angle);
+	bot1Z += bot1Speed*sin(PI / 180 * -bot1Angle);
+	//if (threads < 1) {
+	glutTimerFunc(100, moveBot1, 0);
+
+	//}
+
+	glutPostRedisplay();
+}
+
+
+int threads = 0;
 // Callback, called at initialization and whenever user resizes the window.
 void reshape(int w, int h)
 {
@@ -336,6 +425,43 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'Z':
 		zoom += 1;
+		break;
+	case 'w':
+		//wheelAngle += 1;
+		bot1Speed += 0.02;
+		if (bot1Speed >= 0.2) {
+			bot1Speed = 0.2;
+		}
+		if (threads < 1) {
+			moveBot1();
+			threads += 1;
+		}
+		//glutTimerFunc(200, moveSubF, 0);
+		glutPostRedisplay();
+
+		break;
+	case 'd':
+		bot1Angle -= 10;
+		glutPostRedisplay();
+		break;
+	case 's':
+
+		//wheelAngle += 1;
+		bot1Speed -= 0.02;
+		if (bot1Speed <= -0.2) {
+			bot1Speed = -0.2;
+		}
+		if (threads < 1) {
+			moveBot1();
+			threads += 1;
+		}
+		//glutTimerFunc(200, moveSubF, 0);
+		glutPostRedisplay();
+
+		break;
+	case 'a':
+		bot1Angle += 10;
+		glutPostRedisplay();
 		break;
 	}
 	if (zoom < 30) {
