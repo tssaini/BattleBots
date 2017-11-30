@@ -13,4 +13,6 @@ c:\users\taranpreet\downloads\a3\a1skeleton\main.c(134): warning C4305: 'initial
 c:\users\taranpreet\downloads\a3\a1skeleton\main.c(211): warning C4101: 'ambient': unreferenced local variable
 c:\users\taranpreet\downloads\a3\a1skeleton\main.c(212): warning C4101: 'diffuse': unreferenced local variable
 c:\users\taranpreet\downloads\a3\a1skeleton\main.c(213): warning C4101: 'specular': unreferenced local variable
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(269): warning C4244: 'function': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(279): warning C4244: 'function': conversion from 'int' to 'GLfloat', possible loss of data
   A1Skeleton.vcxproj -> C:\Users\taranpreet\Downloads\A3\Debug\A3.exe

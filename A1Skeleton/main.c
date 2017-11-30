@@ -245,20 +245,65 @@ void display(void)
 	glBindTexture(GL_TEXTURE_2D, 2001);
 
 
-	glPushMatrix();
-	
-	//CubeMesh d = newCube();
+	/*glPushMatrix();
+	glScalef(5.0f, 5.0f, 5.0f);
+	CubeMesh d = newCube();
+	drawCube(&d);
+	glPopMatrix();*/
 
-	glPopMatrix();
 
-	glPushMatrix();
+	/*glPushMatrix();
 	GLUquadricObj *quadric;
 	quadric = gluNewQuadric();
-	glTranslatef(10, 1, 1);
+	glScalef(1.5f,1.5f,1.5f);
 	gluQuadricTexture(quadric, GL_TRUE);
 	gluSphere(quadric, .5, 36, 18);
+	glPopMatrix();*/
+
+	glPushMatrix();
+	CubeMesh c = newCube();
+
+	//shovel
+	glPushMatrix();
+	glTranslatef(0, 2.5, 0);
+	glRotatef(ePitch, 0, 0, 1);
+	glTranslatef(2.75, 0.125, 0);
+	drawCube(&c);
+	glPopMatrix();
+
+	//shovel
+	glPushMatrix();
+	glTranslatef(0, 2.5, 0);
+	glRotatef(ePitch, 0, 0, 1);
+	glTranslatef(2.75, 0.125, 0);
+	glScalef(0.5, 0.5, 0.5);
+	glScalef(0.5, 0.25, 0.5);
+	drawCube(&c);
+	glPopMatrix();
+
+	//elbow
+	glPushMatrix();
+	glTranslatef(0, 2.5, 0);
+	glRotatef(ePitch, 0, 0, 1);
+	glTranslatef(1.25, 0.25, 0);
+	glScalef(0.5, 0.5, 0.5);
+	glScalef(2.5, 0.5, 0.5);
+	drawCube(&c);
+	glPopMatrix();
+
+	//shoulder
+	glPushMatrix();
+	glTranslatef(0, 1.25, 0);
+	glRotated(90, 0, 0, 1);
+	glScalef(0.5, 0.5, 0.5);
+	glScalef(2.5, 0.5, 0.5);
+	drawCube(&c);
+	glPopMatrix();
 
 	glPopMatrix();
+
+
+
 	glBindTexture(GL_TEXTURE_2D, 2000);
 
 

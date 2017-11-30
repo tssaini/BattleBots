@@ -24,3 +24,7 @@ typedef struct CubeMesh
 	float highlightMat_shininess[1];
 
 } CubeMesh;
+
+CubeMesh newCube();
+void drawCube(CubeMesh *cube);
+void getBBox(CubeMesh *cube, Vector3D *min, Vector3D *max);

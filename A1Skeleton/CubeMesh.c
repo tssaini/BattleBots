@@ -81,7 +81,7 @@ void getBBox(CubeMesh *cube, Vector3D *min, Vector3D *max)
 
 void drawCube(CubeMesh *cube)
 {
-    if (cube->selected)
+    /*if (cube->selected)
     {
         // Setup the material and lights used for selected cube
         glMaterialfv(GL_FRONT, GL_AMBIENT, cube->highlightMat_ambient);
@@ -96,7 +96,7 @@ void drawCube(CubeMesh *cube)
         glMaterialfv(GL_FRONT, GL_SPECULAR, cube->mat_specular);
         glMaterialfv(GL_FRONT, GL_DIFFUSE, cube->mat_diffuse);
         glMaterialfv(GL_FRONT, GL_SHININESS, cube->mat_shininess);
-    }
+    }*/
 
 
     // Transform and Draw cube   
@@ -106,40 +106,65 @@ void drawCube(CubeMesh *cube)
 
     glBegin(GL_QUADS);
     // Back Face
+	
     glNormal3f(quadNormals[0][0], quadNormals[0][1], quadNormals[0][2]);
+	glTexCoord2f(0.0, 0.0);
     glVertex3f(vertices[quads[0]][0], vertices[quads[0]][1], vertices[quads[0]][2]);
+	glTexCoord2f(0.0, 1.0);
     glVertex3f(vertices[quads[1]][0], vertices[quads[1]][1], vertices[quads[1]][2]);
+	glTexCoord2f(1.0, 1.0);
     glVertex3f(vertices[quads[2]][0], vertices[quads[2]][1], vertices[quads[2]][2]);
+	glTexCoord2f(1.0, 0.0);
     glVertex3f(vertices[quads[3]][0], vertices[quads[3]][1], vertices[quads[3]][2]);
     // Top Face
     glNormal3f(quadNormals[1][0], quadNormals[1][1], quadNormals[1][2]);
+	glTexCoord2f(0.0, 0.0);
     glVertex3f(vertices[quads[4]][0], vertices[quads[4]][1], vertices[quads[4]][2]);
+	glTexCoord2f(0.0, 1.0);
     glVertex3f(vertices[quads[5]][0], vertices[quads[5]][1], vertices[quads[5]][2]);
+	glTexCoord2f(1.0, 1.0);
     glVertex3f(vertices[quads[6]][0], vertices[quads[6]][1], vertices[quads[6]][2]);
+	glTexCoord2f(1.0, 0.0);
     glVertex3f(vertices[quads[7]][0], vertices[quads[7]][1], vertices[quads[7]][2]);
     // Left Face
     glNormal3f(quadNormals[2][0], quadNormals[2][1], quadNormals[2][2]);
+	glTexCoord2f(0.0, 0.0);
     glVertex3f(vertices[quads[8]][0], vertices[quads[8]][1], vertices[quads[8]][2]);
+	glTexCoord2f(0.0, 1.0);
     glVertex3f(vertices[quads[9]][0], vertices[quads[9]][1], vertices[quads[9]][2]);
+	glTexCoord2f(1.0, 1.0);
     glVertex3f(vertices[quads[10]][0], vertices[quads[10]][1], vertices[quads[10]][2]);
+	glTexCoord2f(1.0, 0.0);
     glVertex3f(vertices[quads[11]][0], vertices[quads[11]][1], vertices[quads[11]][2]);
     // Right Face
     glNormal3f(quadNormals[3][0], quadNormals[3][1], quadNormals[3][2]);
+	glTexCoord2f(0.0, 0.0);
     glVertex3f(vertices[quads[12]][0], vertices[quads[12]][1], vertices[quads[12]][2]);
+	glTexCoord2f(0.0, 1.0);
     glVertex3f(vertices[quads[13]][0], vertices[quads[13]][1], vertices[quads[13]][2]);
+	glTexCoord2f(1.0, 1.0);
     glVertex3f(vertices[quads[14]][0], vertices[quads[14]][1], vertices[quads[14]][2]);
+	glTexCoord2f(1.0, 0.0);
     glVertex3f(vertices[quads[15]][0], vertices[quads[15]][1], vertices[quads[15]][2]);
     // Front Face
     glNormal3f(quadNormals[4][0], quadNormals[4][1], quadNormals[4][2]);
+	glTexCoord2f(0.0, 0.0);
     glVertex3f(vertices[quads[16]][0], vertices[quads[16]][1], vertices[quads[16]][2]);
+	glTexCoord2f(0.0, 1.0);
     glVertex3f(vertices[quads[17]][0], vertices[quads[17]][1], vertices[quads[17]][2]);
+	glTexCoord2f(1.0, 1.0);
     glVertex3f(vertices[quads[18]][0], vertices[quads[18]][1], vertices[quads[18]][2]);
+	glTexCoord2f(1.0, 0.0);
     glVertex3f(vertices[quads[19]][0], vertices[quads[19]][1], vertices[quads[19]][2]);
     // Bottom Face
     glNormal3f(quadNormals[5][0], quadNormals[5][1], quadNormals[5][2]);
+	glTexCoord2f(0.0, 0.0);
     glVertex3f(vertices[quads[20]][0], vertices[quads[20]][1], vertices[quads[20]][2]);
+	glTexCoord2f(0.0, 1.0);
     glVertex3f(vertices[quads[21]][0], vertices[quads[21]][1], vertices[quads[21]][2]);
+	glTexCoord2f(1.0, 1.0);
     glVertex3f(vertices[quads[22]][0], vertices[quads[22]][1], vertices[quads[22]][2]);
+	glTexCoord2f(1.0, 0.0);
     glVertex3f(vertices[quads[23]][0], vertices[quads[23]][1], vertices[quads[23]][2]);
     glEnd();
     glPopMatrix();
