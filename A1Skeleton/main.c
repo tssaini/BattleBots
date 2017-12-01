@@ -11,26 +11,22 @@
 #include "Matrix3D.h"
 #include "CubeMesh.h"
 #include "RGBpixmap.h"
+#include "Bot.h"
 
-const int meshSize = 32;    // Default Mesh Size
+const int meshSize = 128;    // Default Mesh Size
 const int vWidth = 650;     // Viewport width in pixels
 const int vHeight = 500;    // Viewport height in pixels
 
 #define PI 3.14159265
 
-int camr = 20;
-
 double val = PI / 180;
 double thetaC = (GLdouble)PI/2;
 double phiC = (GLdouble)PI/4;
 
+int camr = 20;
 GLdouble camx = 0;
 GLdouble camy = 8.4852;
 GLdouble camz = 8.4852;
-
-int sYaw;
-int sPitch;
-int ePitch;
 
 static int currentButton;
 static unsigned char currentKey;
@@ -38,8 +34,7 @@ static unsigned char currentKey;
 GLdouble width = 300;
 GLdouble height = 300;
 GLdouble zoom = 60;
-
-// Lighting/shading and material properties for submarine - upcoming lecture - just copy for now
+int fpv = 0;
 
 // Light properties
 static GLfloat light_position0[] = { -6.0F, 12.0F, 0.0F, 1.0F };
@@ -48,16 +43,11 @@ static GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
 static GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 static GLfloat light_ambient[] = { 0.2F, 0.2F, 0.2F, 1.0F };
 
-// Material properties
-static GLfloat submarine_mat_ambient[] = { 0.4F, 0.2F, 0.0F, 1.0F };
-static GLfloat submarine_mat_specular[] = { 0.1F, 0.1F, 0.0F, 1.0F };
-static GLfloat submarine_mat_diffuse[] = { 0.9F, 0.5F, 0.0F, 1.0F };
-static GLfloat submarine_mat_shininess[] = { 0.0F };
-
 // A quad mesh representing the ground / sea floor 
 static QuadMesh groundMesh;
 
-static CubeMesh cube;
+Bot pBot;//player bot
+Bot aiBot;
 
 // Structure defining a bounding box, currently unused
 //struct BoundingBox {
@@ -75,15 +65,7 @@ void keyboard(unsigned char key, int x, int y);
 void functionKeys(int key, int x, int y);
 Vector3D ScreenToWorld(int x, int y);
 
-
-static GLfloat bot1Speed = 0.0;
-static GLfloat bot1X = 0.0;
-static GLfloat bot1Y = 0.0;
-static GLfloat bot1Z = 0.0;
-static GLfloat bot1Angle = 0.0;
-static GLfloat wheelAngle = 0;
-
-RGBpixmap pix[3];
+RGBpixmap pix[4];
 
 int main(int argc, char **argv)
 {
@@ -93,7 +75,8 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(vWidth, vHeight);
     glutInitWindowPosition(200, 30);
-    glutCreateWindow("Assignment 2");
+    int window = glutCreateWindow("Assignment 3");
+	//int winSub = glutCreateSubWindow(window, 200, 30, 50, 50);
 
     // Initialize GL
     initOpenGL(vWidth, vHeight);
@@ -158,6 +141,7 @@ void createHoles() {
 	ComputeNormalsQM(&groundMesh);
 }
 
+
 // Set up OpenGL. For viewport and projection setup see reshape(). */
 void initOpenGL(int w, int h)
 {
@@ -185,11 +169,9 @@ void initOpenGL(int w, int h)
 	readBMPFile(&pix[2], "..\\tire.bmp");  // read texture for side 1 from image
 	setTexture(&pix[2], 2002);
 
-	/*
-	//glGenTextures(1, 2000);
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);   // store pixels by byte	
-	glBindTexture(GL_TEXTURE_2D, 2000); // select current texture
-	*/
+	readBMPFile(&pix[2], "..\\camo.bmp");  // read texture for side 1 from image
+	setTexture(&pix[2], 2003);
+	
 	// Set up texture mapping assuming no lighting/shading 
 	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
@@ -214,61 +196,22 @@ void initOpenGL(int w, int h)
     groundMesh = NewQuadMesh(meshSize);
     InitMeshQM(&groundMesh, meshSize, origin, 32.0, 32.0, dir1v, dir2v);
 
-    Vector3D ambient = NewVector3D(0.0f, 0.05f, 0.0f);
+    /*Vector3D ambient = NewVector3D(0.0f, 0.05f, 0.0f);
     Vector3D diffuse = NewVector3D(0.4f, 0.8f, 0.4f);
-    Vector3D specular = NewVector3D(0.04f, 0.04f, 0.04f);
+    Vector3D specular = NewVector3D(0.04f, 0.04f, 0.04f);*/
     //SetMaterialQM(&groundMesh, ambient, diffuse, specular, 0.2);
 
 	createHoles();
+
+	pBot = newBot();
+	pBot.z = 10;
+	aiBot = newBot();
+	aiBot.z = -10;
+
     // Set up the bounding box of the scene
     // Currently unused. You could set up bounding boxes for your objects eventually.
     //Set(&BBox.min, -8.0f, 0.0, -8.0);
     //Set(&BBox.max, 8.0f, 6.0,  8.0);
-}
-
-void draw_circle(const GLfloat radius, const GLuint num_vertex)
-{
-	const GLfloat delta_angle = 2.0*M_PI / num_vertex;
-
-	glBegin(GL_TRIANGLE_FAN);
-
-	glTexCoord2f(0.5, 0.5);
-
-	glVertex4f(0,0,0,1);
-
-	for (int i = 0; i < num_vertex; i++)
-	{
-		glTexCoord2f((cos(delta_angle*i) + 1.0)*0.5, (sin(delta_angle*i) + 1.0)*0.5);
-
-		glVertex4f(cos(delta_angle*i) * radius, sin(delta_angle*i) * radius, 0, 1);
-	}
-	glTexCoord2f((1.0 + 1.0)*0.5, (0.0 + 1.0)*0.5);
-
-	glVertex4f(1.0 * radius, 0, 0, 1);
-
-	glEnd();
-}
-
-
-void drawWheel() {
-
-	glPushMatrix();
-	GLUquadricObj *quadric;
-	quadric = gluNewQuadric();
-	gluQuadricTexture(quadric, GL_TRUE);
-	gluCylinder(quadric, 1, 1, 0.5, 20, 20);
-	glPopMatrix();
-
-	glPushMatrix();
-	draw_circle(1,20);
-	glPopMatrix();
-
-	glPushMatrix();
-	
-	glTranslatef(0,0,0.5);
-	draw_circle(1, 20);
-	glPopMatrix();
-
 }
 
 // Callback, called whenever GLUT determines that the window should be redisplayed
@@ -284,122 +227,49 @@ void display(void)
 	glLoadIdentity();
 	
 	// Set up the camera at position (0, 6, 12) looking at the origin, up along positive y axis
-	gluLookAt(camx, camy, camz, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	//gluLookAt(camx, camy, camz, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	if (fpv == 1) {
+		Matrix3D m = NewIdentity();
+		//position to look at
+		MatrixRightMultiplyV(&m, NewTranslate(pBot.x, pBot.y+1, pBot.z));
+		MatrixRightMultiplyV(&m, NewRotateY(pBot.botAngle));
+		MatrixRightMultiplyV(&m, NewTranslate(4, 0, 0));
 
+		Vector3D v = NewVector3D(0,0,0);
+		VectorLeftMultiply(&v, &m);
+		//camera position
+		Matrix3D m2 = NewIdentity();
+		MatrixRightMultiplyV(&m2, NewTranslate(pBot.x, pBot.y+1, pBot.z));
+		MatrixRightMultiplyV(&m2, NewRotateY(pBot.botAngle));
+		MatrixRightMultiplyV(&m2, NewTranslate(0.5, 0, 0));
+
+		Vector3D v2 = NewVector3D(0, 0, 0);
+		VectorLeftMultiply(&v2, &m2);
+		gluLookAt(v2.x,v2.y, v2.z, v.x, v.y, v.z, 0.0, 1.0, 0.0);
+	}
+	else {
+		gluLookAt(camx, camy, camz, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	}
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-    // Apply transformations to move submarine
-    // ...
 	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, 2001);
+	pBot.y = getBotY(&pBot, &groundMesh, meshSize);
+	drawPlayerBot(&pBot);
 
-
-	/*glPushMatrix();
-	glScalef(5.0f, 5.0f, 5.0f);
-	CubeMesh d = newCube();
-	drawCube(&d);
-	glPopMatrix();*/
-
-
-	/*glPushMatrix();
-	GLUquadricObj *quadric;
-	quadric = gluNewQuadric();
-	glScalef(1.5f,1.5f,1.5f);
-	gluQuadricTexture(quadric, GL_TRUE);
-	gluSphere(quadric, .5, 36, 18);
-	glPopMatrix();*/
-
-	//bot 1
-	glPushMatrix();
-	CubeMesh c = newCube();
-	
-	glTranslatef(bot1X, bot1Y, bot1Z);
-	glRotatef(bot1Angle, 0.0, 1.0, 0.0);
-
-	//base
-	glPushMatrix();
-	glTranslatef(0,0,0);
-	glScalef(0.75,0.25,0.75);
-	drawCube(&c);
-	glPopMatrix();
-
-	glBindTexture(GL_TEXTURE_2D, 2002);
-	//wheel 1
-	glPushMatrix();
-	glTranslatef(0.5,0,0.75);
-	glRotatef(wheelAngle, 0,0,1);
-	glScalef(0.4,0.4,0.4);
-	drawWheel();
-	glPopMatrix();
-
-	//wheel 2
-	glPushMatrix();
-	glTranslatef(-0.5, 0, 0.75);
-	glRotatef(wheelAngle, 0, 0, 1);
-	glScalef(0.4, 0.4, 0.4);
-	drawWheel();
-	glPopMatrix();
-	
-	//wheel 3
-	glPushMatrix();
-	glTranslatef(-0.5, 0, -0.75-0.20);
-	glRotatef(wheelAngle, 0, 0, 1);
-	glScalef(0.4, 0.4, 0.4);
-	drawWheel();
-	glPopMatrix();
-
-	//wheel 4
-	glPushMatrix();
-	glTranslatef(0.5, 0, -0.75-0.20);
-	glRotatef(wheelAngle, 0, 0, 1);
-	glScalef(0.4, 0.4, 0.4);
-	drawWheel();
-	glPopMatrix();
-
-	glPopMatrix();
-
-
-
-	glBindTexture(GL_TEXTURE_2D, 2000);
-
+	aiBot.y = getBotY(&aiBot, &groundMesh, meshSize);
+	drawAIBot(&aiBot);
 
 	glPushMatrix();
+
     // Draw ground/sea floor
+	glBindTexture(GL_TEXTURE_2D, 2000);
     DrawMeshQM(&groundMesh, meshSize);
+
 	glPopMatrix();
 
 	glPopMatrix();
 
     glutSwapBuffers();   // Double buffering, swap buffers
-}
-
-void moveBot1()
-{
-	//printf("speed is : %f\n", speed);
-	//theta += speed*100 *7.0;
-	if (bot1Speed >= 0.01) {
-		//printf("forwards\n");
-		wheelAngle -= bot1Speed * 30 * 7.0;
-		if (wheelAngle > 360.0)
-			wheelAngle -= 360.0;
-	}
-	else if (bot1Speed <= 0.01) {
-		//printf("backwards\n");
-		wheelAngle -= bot1Speed * 30 * 7.0;
-		if (wheelAngle < 0)
-			wheelAngle += 360.0;
-	}
-
-
-	bot1X += bot1Speed*cos(PI / 180 * -bot1Angle);
-	bot1Z += bot1Speed*sin(PI / 180 * -bot1Angle);
-	//if (threads < 1) {
-	glutTimerFunc(100, moveBot1, 0);
-
-	//}
-
-	glutPostRedisplay();
 }
 
 
@@ -428,12 +298,12 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case 'w':
 		//wheelAngle += 1;
-		bot1Speed += 0.02;
-		if (bot1Speed >= 0.2) {
-			bot1Speed = 0.2;
+		pBot.speed += 0.02;
+		if (pBot.speed >= 0.2) {
+			pBot.speed = 0.2;
 		}
 		if (threads < 1) {
-			moveBot1();
+			moveBotOnMesh(&pBot);
 			threads += 1;
 		}
 		//glutTimerFunc(200, moveSubF, 0);
@@ -441,18 +311,18 @@ void keyboard(unsigned char key, int x, int y)
 
 		break;
 	case 'd':
-		bot1Angle -= 10;
+		pBot.botAngle -= 10;
 		glutPostRedisplay();
 		break;
 	case 's':
 
 		//wheelAngle += 1;
-		bot1Speed -= 0.02;
-		if (bot1Speed <= -0.2) {
-			bot1Speed = -0.2;
+		pBot.speed -= 0.02;
+		if (pBot.speed <= -0.2) {
+			pBot.speed = -0.2;
 		}
 		if (threads < 1) {
-			moveBot1();
+			moveBotOnMesh(&pBot);
 			threads += 1;
 		}
 		//glutTimerFunc(200, moveSubF, 0);
@@ -460,9 +330,44 @@ void keyboard(unsigned char key, int x, int y)
 
 		break;
 	case 'a':
-		bot1Angle += 10;
+		pBot.botAngle += 10;
 		glutPostRedisplay();
 		break;
+	//-----------move the arm--------------
+	case 'e':
+		pBot.hPitch -= 4;
+		if (pBot.hPitch < -90)
+			pBot.hPitch += 4;
+		break;
+	case 'E':
+		pBot.hPitch += 4;
+		if (pBot.hPitch > 90)
+			pBot.hPitch -= 4;
+		break;
+	case 'r':
+		pBot.aPitch -= 4;
+		if (pBot.aPitch < -75)
+			pBot.aPitch += 4;
+		break;
+	case 'R':
+		pBot.aPitch += 4;
+		if (pBot.aPitch > 75)
+			pBot.aPitch -= 4;
+		break;
+	case 't':
+		pBot.aYaw += 4;
+		break;
+	case 'T':
+		pBot.aYaw -= 4;
+		break;
+	case 'v' :
+		if (fpv == 1) {
+			fpv = 0;
+		}else {
+			fpv = 1;
+		}
+		break;
+
 	}
 	if (zoom < 30) {
 		zoom += 1;
@@ -556,7 +461,6 @@ void mouseMotionHandler(int xMouse, int yMouse)
 		px = xMouse;
 		py = yMouse;
 		//printf("%lf %lf %lf %lf %lf \n", camx, camy, camz, thetaC*(180/PI), phiC*(180/PI));
-	//gluLookAt(camx, camy, camz, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
     }
     glutPostRedisplay();   // Trigger a window redisplay
 }

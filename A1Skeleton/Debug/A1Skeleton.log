@@ -1,36 +1,19 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (A1Skeleton.vcxproj, A2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.c
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(153): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(119): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(121): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(125): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(127): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(128): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(130): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(133): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(134): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(135): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(217): warning C4101: 'ambient': unreferenced local variable
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(218): warning C4101: 'diffuse': unreferenced local variable
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(219): warning C4101: 'specular': unreferenced local variable
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(239): warning C4018: '<': signed/unsigned mismatch
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(241): warning C4244: 'function': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(243): warning C4244: 'function': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(247): warning C4244: 'function': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(231): warning C4244: 'initializing': conversion from 'double' to 'const GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(332): warning C4305: 'function': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(340): warning C4305: 'function': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(346): warning C4305: 'function': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(348): warning C4305: 'function': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(354): warning C4305: 'function': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(356): warning C4305: 'function': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(383): warning C4244: '-=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(389): warning C4244: '-=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(395): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(396): warning C4244: '+=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(398): warning C4113: 'void (__cdecl *)()' differs in parameter lists from 'void (__cdecl *)(int)'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(431): warning C4305: '+=': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(433): warning C4305: '=': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(450): warning C4305: '-=': truncation from 'double' to 'GLfloat'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(452): warning C4305: '=': truncation from 'double' to 'GLfloat'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(136): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(102): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(104): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(108): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(110): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(111): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(113): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(116): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(117): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(118): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(256): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(259): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(301): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(303): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(320): warning C4305: '-=': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(322): warning C4305: '=': truncation from 'double' to 'float'
   A1Skeleton.vcxproj -> C:\Users\taranpreet\Downloads\A3\Debug\A3.exe

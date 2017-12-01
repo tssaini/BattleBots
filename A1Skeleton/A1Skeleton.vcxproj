@@ -114,6 +114,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bot.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="Matrix3D.h" />
     <ClInclude Include="QuadMesh.h" />
@@ -121,6 +122,7 @@
     <ClInclude Include="Vector3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bot.c" />
     <ClCompile Include="CubeMesh.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Matrix3D.c" />
