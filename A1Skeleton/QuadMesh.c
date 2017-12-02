@@ -148,7 +148,7 @@ bool InitMeshQM(QuadMesh* qm, int meshSize, Vector3D origin, double meshLength, 
 }
 
 // Draw the mesh by drawing all quads.
-void DrawMeshQM(QuadMesh* qm, int meshSize)
+void DrawMeshQM(QuadMesh* qm, int meshSize, float holes[][2], int numHole)
 {
 	int currentQuad=0;
 
@@ -159,47 +159,60 @@ void DrawMeshQM(QuadMesh* qm, int meshSize)
 
 	for(int j=0; j < meshSize; j++)
 	{
-		for(int k=0; k < meshSize; k++)
+		
+		for (int k = 0; k < meshSize; k++)
 		{
-			glBegin(GL_QUADS);
+			glBindTexture(GL_TEXTURE_2D, 2000);
+			for (int i = 0; i < numHole; i++) {
+				int hx = holes[i][0];
+				int hz = holes[i][1];
+
+				double r = sqrt(pow((hx - qm->quads[currentQuad].vertices[0]->position.x), 2) + pow((hz - qm->quads[currentQuad].vertices[0]->position.z), 2));
+				if (r <= 2) {
+					glBindTexture(GL_TEXTURE_2D, 2005);
+				}
+				
+			}
 			
-			glNormal3f(qm->quads[currentQuad].vertices[0]->normal.x,
-				       qm->quads[currentQuad].vertices[0]->normal.y,
-					   qm->quads[currentQuad].vertices[0]->normal.z);
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(qm->quads[currentQuad].vertices[0]->position.x,
-				       qm->quads[currentQuad].vertices[0]->position.y,
-					   qm->quads[currentQuad].vertices[0]->position.z);
+				glBegin(GL_QUADS);
+			
+				glNormal3f(qm->quads[currentQuad].vertices[0]->normal.x,
+						   qm->quads[currentQuad].vertices[0]->normal.y,
+						   qm->quads[currentQuad].vertices[0]->normal.z);
+				glTexCoord2f(0.0, 0.0);
+				glVertex3f(qm->quads[currentQuad].vertices[0]->position.x,
+						   qm->quads[currentQuad].vertices[0]->position.y,
+						   qm->quads[currentQuad].vertices[0]->position.z);
 			
 
-			glNormal3f(qm->quads[currentQuad].vertices[1]->normal.x,
-				       qm->quads[currentQuad].vertices[1]->normal.y,
-					   qm->quads[currentQuad].vertices[1]->normal.z);
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(qm->quads[currentQuad].vertices[1]->position.x,
-				       qm->quads[currentQuad].vertices[1]->position.y,
-					   qm->quads[currentQuad].vertices[1]->position.z);
+				glNormal3f(qm->quads[currentQuad].vertices[1]->normal.x,
+						   qm->quads[currentQuad].vertices[1]->normal.y,
+						   qm->quads[currentQuad].vertices[1]->normal.z);
+				glTexCoord2f(0.0, 1.0);
+				glVertex3f(qm->quads[currentQuad].vertices[1]->position.x,
+						   qm->quads[currentQuad].vertices[1]->position.y,
+						   qm->quads[currentQuad].vertices[1]->position.z);
 			
 
-			glNormal3f(qm->quads[currentQuad].vertices[2]->normal.x,
-				       qm->quads[currentQuad].vertices[2]->normal.y,
-					   qm->quads[currentQuad].vertices[2]->normal.z);
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f(qm->quads[currentQuad].vertices[2]->position.x,
-				       qm->quads[currentQuad].vertices[2]->position.y,
-					   qm->quads[currentQuad].vertices[2]->position.z);
+				glNormal3f(qm->quads[currentQuad].vertices[2]->normal.x,
+						   qm->quads[currentQuad].vertices[2]->normal.y,
+						   qm->quads[currentQuad].vertices[2]->normal.z);
+				glTexCoord2f(1.0, 1.0);
+				glVertex3f(qm->quads[currentQuad].vertices[2]->position.x,
+						   qm->quads[currentQuad].vertices[2]->position.y,
+						   qm->quads[currentQuad].vertices[2]->position.z);
 			
 
-			glNormal3f(qm->quads[currentQuad].vertices[3]->normal.x,
-				       qm->quads[currentQuad].vertices[3]->normal.y,
-					   qm->quads[currentQuad].vertices[3]->normal.z);
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(qm->quads[currentQuad].vertices[3]->position.x,
-				       qm->quads[currentQuad].vertices[3]->position.y,
-					   qm->quads[currentQuad].vertices[3]->position.z);
+				glNormal3f(qm->quads[currentQuad].vertices[3]->normal.x,
+						   qm->quads[currentQuad].vertices[3]->normal.y,
+						   qm->quads[currentQuad].vertices[3]->normal.z);
+				glTexCoord2f(1.0, 0.0);
+				glVertex3f(qm->quads[currentQuad].vertices[3]->position.x,
+						   qm->quads[currentQuad].vertices[3]->position.y,
+						   qm->quads[currentQuad].vertices[3]->position.z);
 					   
-			glEnd();
-			currentQuad++;
+				glEnd();
+				currentQuad++;
 		}
 	}
 }

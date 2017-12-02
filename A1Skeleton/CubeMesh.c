@@ -77,6 +77,7 @@ CubeMesh newCube()
 void getBBox(CubeMesh *cube, Vector3D *min, Vector3D *max)
 {
 	// TODO: Implement if needed
+	
 }
 
 void drawCube(CubeMesh *cube)

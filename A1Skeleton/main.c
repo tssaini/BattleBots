@@ -65,8 +65,8 @@ void keyboard(unsigned char key, int x, int y);
 void functionKeys(int key, int x, int y);
 Vector3D ScreenToWorld(int x, int y);
 
-RGBpixmap pix[4];
-
+RGBpixmap pix[6];
+int threads2 = 0;
 int main(int argc, char **argv)
 {
 
@@ -95,13 +95,14 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
+float dirt[][2] = { {-8,5},{10,8}, {-6,-8}};
 
 void createHoles() {
 	//x z, b a 
-	float holes_hills[12][4] = { { 0,0,-4,0.01},
-								{ -8,5,-1, 0.5 },
-								{ 10,8,-2, 0.07 },
+	float holes_hills[][4] = { { 0,0,-4,0.01},
+								{ -8,5,-2, 0.5 },
+								{ -6,-8,-1, 0.5 },
+								{ 10,8,-4, 0.07 },
 
 								//hills
 								{ 4,0, 3, 0.5},
@@ -169,9 +170,15 @@ void initOpenGL(int w, int h)
 	readBMPFile(&pix[2], "..\\tire.bmp");  // read texture for side 1 from image
 	setTexture(&pix[2], 2002);
 
-	readBMPFile(&pix[2], "..\\camo.bmp");  // read texture for side 1 from image
-	setTexture(&pix[2], 2003);
+	readBMPFile(&pix[3], "..\\camo.bmp");  // read texture for side 1 from image
+	setTexture(&pix[3], 2003);
 	
+	readBMPFile(&pix[4], "..\\gold.bmp");  // read texture for side 1 from image
+	setTexture(&pix[4], 2004);
+
+	readBMPFile(&pix[5], "..\\dirt.bmp");  // read texture for side 1 from image
+	setTexture(&pix[5], 2005);
+
 	// Set up texture mapping assuming no lighting/shading 
 	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
@@ -205,9 +212,9 @@ void initOpenGL(int w, int h)
 
 	pBot = newBot();
 	pBot.z = 10;
+
 	aiBot = newBot();
 	aiBot.z = -10;
-
     // Set up the bounding box of the scene
     // Currently unused. You could set up bounding boxes for your objects eventually.
     //Set(&BBox.min, -8.0f, 0.0, -8.0);
@@ -258,12 +265,13 @@ void display(void)
 
 	aiBot.y = getBotY(&aiBot, &groundMesh, meshSize);
 	drawAIBot(&aiBot);
-
+	moveAI(&aiBot, &pBot, threads2);
+	threads2 += 1;
 	glPushMatrix();
 
     // Draw ground/sea floor
 	glBindTexture(GL_TEXTURE_2D, 2000);
-    DrawMeshQM(&groundMesh, meshSize);
+    DrawMeshQM(&groundMesh, meshSize, dirt, sizeof(dirt)/sizeof(dirt[0]));
 
 	glPopMatrix();
 
@@ -433,6 +441,7 @@ void mouse(int button, int state, int x, int y)
 
     glutPostRedisplay();   // Trigger a window redisplay
 }
+
 int px = 0;
 int py = 0;
 int signp = 1;

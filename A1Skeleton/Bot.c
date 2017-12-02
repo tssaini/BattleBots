@@ -9,6 +9,7 @@
 #include "CubeMesh.h"
 #include "QuadMesh.h"
 
+#include "Matrix3D.h"
 #include "Bot.h"
 
 #define PI 3.14159265
@@ -123,8 +124,8 @@ void drawAIBot(Bot *b) {
 	//move bot
 	glTranslatef(b->x, b->y, b->z);
 	glRotatef(b->botAngle, 0.0, 1.0, 0.0);
-	//bind camo texture
-	glBindTexture(GL_TEXTURE_2D, 2003);
+	//bind gold texture
+	glBindTexture(GL_TEXTURE_2D, 2004);
 
 
 	glPushMatrix();
@@ -197,6 +198,57 @@ void drawAIBot(Bot *b) {
 	glPopMatrix();
 }
 
+void moveAI(Bot *aiBot, Bot *pBot, int thread) {
+	//TODO: set ai speed and angle here
+	time_t t;
+	srand((unsigned)time(&t));
+	int randInt = rand() % 30; //
+
+	double xDis = pBot->x - aiBot->x;
+	double zDis = pBot->z - aiBot->z;
+
+
+	double angle = atan(xDis/zDis)*180/PI;
+	if (zDis > 0) {
+		angle += 270;
+	}
+	else {
+		angle += 90;
+	}
+
+	double distance = sqrt(pow((aiBot->x - pBot->x), 2) + pow((aiBot->z - pBot->z), 2));
+
+	if (distance > 15) {
+		aiBot->speed = 0.15;
+		aiBot->botAngle = angle;
+	}
+	//bring down the hammer
+	if (distance <= 3) {
+		if (zDis > 0 && aiBot->aPitch > -80) {
+			aiBot->aPitch -= 20;
+		}
+		else if(zDis < 0 && aiBot->aPitch < 80) {
+			aiBot->aPitch += 20;
+		}
+	}
+	else if(aiBot->aPitch < 0){
+		aiBot->aPitch += 20;
+	}
+	else if (aiBot->aPitch > 0) {
+		aiBot->aPitch -= 20;
+	}
+
+	if (randInt == 25 || thread ==0) {//turn at random time
+		//speed is max of 0.2 inc 0.02		
+		aiBot->speed = (rand() % 20)/100.0 - (rand() % 20) / 100.0;
+		aiBot->botAngle = rand() % 360;
+	}
+		
+	if(thread == 0){
+		moveBotOnMesh(aiBot);
+	}
+}
+
 void moveBotOnMesh(Bot *b) {
 
 	if (b->speed >= 0.01) {
@@ -216,9 +268,7 @@ void moveBotOnMesh(Bot *b) {
 	b->x += b->speed*cos(PI / 180 * -b->botAngle);
 	b->z += b->speed*sin(PI / 180 * -b->botAngle);
 
-	//getBotY(b->x, b->y, b->z);
-
-	glutTimerFunc(100, moveBotOnMesh, b);
+	glutTimerFunc(50, moveBotOnMesh, b);
 
 	glutPostRedisplay();
 

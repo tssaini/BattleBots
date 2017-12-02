@@ -1,19 +1,20 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2017\Professional\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (A1Skeleton.vcxproj, A2.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   main.c
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(136): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(137): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 c:\users\taranpreet\downloads\a3\a1skeleton\main.c(102): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(104): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(108): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(110): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(105): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(109): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\taranpreet\downloads\a3\a1skeleton\main.c(111): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(113): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(116): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(112): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(114): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\taranpreet\downloads\a3\a1skeleton\main.c(117): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\taranpreet\downloads\a3\a1skeleton\main.c(118): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(256): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(259): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(301): warning C4305: '+=': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(303): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(320): warning C4305: '-=': truncation from 'double' to 'float'
-c:\users\taranpreet\downloads\a3\a1skeleton\main.c(322): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(119): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(263): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(266): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(274): warning C4020: 'DrawMeshQM': too many actual parameters
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(309): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(311): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(328): warning C4305: '-=': truncation from 'double' to 'float'
+c:\users\taranpreet\downloads\a3\a1skeleton\main.c(330): warning C4305: '=': truncation from 'double' to 'float'
   A1Skeleton.vcxproj -> C:\Users\taranpreet\Downloads\A3\Debug\A3.exe

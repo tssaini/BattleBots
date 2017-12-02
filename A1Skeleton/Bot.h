@@ -18,3 +18,5 @@ void drawAIBot(Bot *b);
 
 void moveBotOnMesh(Bot *b);
 double getBotY(Bot *b, QuadMesh *groundMesh, int meshSize);
+void moveAI(Bot *aiBot, Bot *pBot, int thread);
+void moveBotOnMesh(Bot *b);
